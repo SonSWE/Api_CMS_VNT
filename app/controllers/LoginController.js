@@ -9,6 +9,7 @@ exports.LoginPost = async (req, res) => {
         let username = req.body.username;
         let passwordHash = await lib.passwordHash(req.body.password);
         console.log(username);
+        console.log(passwordHash);
         var user = await db.Admin.findOne({
             where: {
                 username: username,
