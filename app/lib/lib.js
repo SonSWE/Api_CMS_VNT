@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = class {
   static async passwordHash(password) {
-    return hash((btoa(password)));
+    return hash(Buffer.from(password, 'base64'));
   }
 
   static generateAuthToken(user, key) {
