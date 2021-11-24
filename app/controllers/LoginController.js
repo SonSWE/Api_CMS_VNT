@@ -8,7 +8,7 @@ exports.LoginPost = async (req, res) => {
     try{
         let username = req.body.username;
         let passwordHash = await lib.passwordHash(req.body.password);
-
+        console.log(username);
         var user = await db.Admin.findOne({
             where: {
                 username: username,
@@ -20,6 +20,7 @@ exports.LoginPost = async (req, res) => {
                 id: user.permissions_id
             }
         });
+        console.log(per);
         if(user){
             var token = lib.generateAuthToken({username: username, permissions: per.key}, process.env.JWT_KEY);
             return res.send({islogin: true, token: token});
