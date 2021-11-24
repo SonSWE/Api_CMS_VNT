@@ -1,0 +1,41 @@
+{
+  "name": "vietnam-together-cms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dinhquyf0/VietNam-Together-CMS.git"
+  },
+  "keywords": [
+    "CMS"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dinhquyf0/VietNam-Together-CMS/issues"
+  },
+  "homepage": "https://github.com/dinhquyf0/VietNam-Together-CMS#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "blueimp-md5": "^2.19.0",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.3.3",
+    "passport": "*",
+    "passport-local": "*",
+    "sequelize": "^6.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
