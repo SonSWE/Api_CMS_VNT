@@ -58,7 +58,7 @@ exports.GetListConfig = async (req, res) => {
 exports.Find = async (req, res) => {
     try{
         const key = req.body.key;
-        db.Config.findAll({where: {key: {[Op.regexp]: `(${key})`}}})
+        var listCofig = await db.Config.findAll({where: {key: {[Op.regexp]: `(${key})`}}})
         .then(data => {
             res.send({message: "Successful", data});
         });
