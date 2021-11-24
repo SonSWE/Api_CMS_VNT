@@ -46,7 +46,7 @@ exports.Update = async (req, res) => {
 
 exports.GetListConfig = async (req, res) => {
     try{
-        db.Config.findAll()
+        var listCofig = await db.Config.findAll()
         .then(data => {
             res.send({message: "Successful", data});
         });
