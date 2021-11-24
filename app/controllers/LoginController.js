@@ -29,6 +29,7 @@ exports.LoginPost = async (req, res) => {
         }
     }
     catch(error){
+        console.log(error);
         res.status(400).send(error);
     } 
 }
