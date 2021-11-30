@@ -10,11 +10,24 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
           },
-          permissions_id: {
-            type: DataTypes.INTEGER(11),
+          permissions: {
+            type: DataTypes.STRING,
+            allowNull: false
+          },
+          create: {
+            type: DataTypes.INTEGER(1),
+            allowNull: false
+          },
+          modify: {
+            type: DataTypes.INTEGER(1),
             allowNull: false,
-            field: 'permissions_id'
-          }
+            field: 'update'
+          },
+          delete: {
+            type: DataTypes.INTEGER(1),
+            allowNull: false
+          },
+          
     },
     {
         tableName:"admin",

@@ -16,12 +16,15 @@ exports.LoginPost = async (req, res) => {
             }
         });
         if(user){
-            var per = await db.Permissions.findOne({
-                where: {
-                    id: user.permissions_id
-                }
-            });
-            var token = lib.generateAuthToken({username: username, permissions: per.key}, process.env.JWT_KEY);
+            const inforLogin = {
+                username: username, 
+                permissions: user.permissions, 
+                create: user.create == 1 ? true : false, 
+                update: user.modify == 1 ? true : false, 
+                delete: user.delete == 1 ? true : false
+            };
+            console.log(inforLogin);
+            var token = lib.generateAuthToken(inforLogin, process.env.JWT_KEY);
             return res.send({islogin: true, token: token});
         }else{
             return res.send({islogin: false});
