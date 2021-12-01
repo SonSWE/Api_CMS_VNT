@@ -97,16 +97,25 @@ exports.Find = async (req, res) => {
 
 exports.Delete = async (req, res) => {
     try{
-        const username = req.body.username;
-        db.Admin.destroy({where:{username : username}})
-        .then(num => {
-            if (num == 1) {
-                res.send({message: "Successful"});
-            } else {
-              res.send({ message: `Cannot update Tutorial with id=${username}. Maybe Tutorial was not found or req.body is empty!`});
+        let username = req.body.username;
+        let usernameLoginNow = req.body.usernameLoginNow;
+        let password = req.body.password;
+        var admin = await db.Admin.findOne({
+            where: {
+                username: usernameLoginNow,
+                password: await lib.passwordHash(password)
             }
-          })
-
+        });
+        if(admin){
+            db.Admin.destroy({where:{username : username}})
+            .then(num => {
+                if (num == 1) {
+                    res.send({message: "Successful"});
+                } else {
+                res.send({ message: `Cannot update Tutorial with id=${username}. Maybe Tutorial was not found or req.body is empty!`});
+                }
+            });
+        }
     }catch(err){
         res.status(500).send({message: "Error", err});
     }
