@@ -20,7 +20,7 @@ exports.Create =  async (req, res) => {
         // save config to database
         db.Config.create(config)
         .then(data => {
-            res.send({message: "Successful", data});
+            res.send({data});
         });
     }catch(err){
         res.status(500).send({message: "Error",err});
@@ -48,7 +48,7 @@ exports.GetListConfig = async (req, res) => {
     try{
         var listCofig = await db.Config.findAll()
         .then(data => {
-            res.send({message: "Successful", data});
+            res.send({data});
         });
     }catch(err){
         res.status(500).send({message: "Error", err});
@@ -60,7 +60,7 @@ exports.Find = async (req, res) => {
         const key = req.body.key;
         var listCofig = await db.Config.findAll({where: {key: {[Op.regexp]: `(${key})`}}})
         .then(data => {
-            res.send({message: "Successful", data});
+            res.send({data});
         });
     }catch(err){
         res.status(500).send({message: "Error", err});
