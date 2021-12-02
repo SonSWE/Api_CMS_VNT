@@ -3,6 +3,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const AdminModel = require('./Admin');
 const ConfigModel = require('./Config');
+const AdminPermissionsModel = require('./AdminPermissions');
+const PermissionsModel = require('./Permissions');
+const PermissionsDetailModel = require('./PermissionsDetail');
 
 require("dotenv").config();
 
@@ -15,6 +18,9 @@ const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MYSQ_USER,proc
 
 const Admin = AdminModel(sequelize, DataTypes);
 const Config = ConfigModel(sequelize, DataTypes);
+const AdminPermissions = AdminPermissionsModel(sequelize, DataTypes);
+const Permissions = PermissionsModel(sequelize, DataTypes);
+const PermissionsDetail = PermissionsDetailModel(sequelize, DataTypes);
 
 sequelize.authenticate()
     .then(() => console.log('ket noi thanh cong'))
@@ -22,5 +28,8 @@ sequelize.authenticate()
 module.exports = {
     Admin,
 	Config,
+	AdminPermissions,
+	Permissions,
+	PermissionsDetail,
     sequelize
 };

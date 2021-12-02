@@ -8,22 +8,16 @@ exports.LoginPost = async (req, res) => {
     try{
         let username = req.body.username;
         let passwordHash = await lib.passwordHash(req.body.password);
-        
-        var user = await db.Admin.findOne({
-            where: {
-                username: username,
-                password: passwordHash
-            }
-        });
+        var user = await db.Admin.findOne({where: {username: username, password: passwordHash }});
         if(user){
+            var adminPer = await db.AdminPermissions.findOne({where: {usernameAdmin: username}});
+            var per = await db.Permissions.findOne({where: {id: adminPer.idPermisions}});
+            var perDetail = await db.PermissionsDetail.findAll({attributes: ['actionName', 'actionCode', 'checkAction']}, {where: {idPermisions: per.id}});
             const inforLogin = {
-                username: username, 
-                permissions: user.permissions, 
-                create: user.create == 1 ? true : false, 
-                update: user.modify == 1 ? true : false, 
-                delete: user.delete == 1 ? true : false
+                username: username,
+                PermissionsName: per.name,
+                Detail: perDetail
             };
-            console.log(inforLogin);
             var token = lib.generateAuthToken(inforLogin, process.env.JWT_KEY);
             return res.send({islogin: true, token: token});
         }else{

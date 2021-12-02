@@ -1,18 +1,18 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('Admin',{
-          username:{
-            type:DataTypes.STRING,
+    return sequelize.define('Permissions',{
+        id: {
+            type: DataTypes.INTEGER(11),
             primaryKey: true
-          },
-          password: {
+        },
+        name: {
             type: DataTypes.STRING,
             allowNull: false
-          }
+        }
 },
     {
-        tableName:"admin",
+        tableName:"permissions",
         createdAt: false,
         updatedAt: false
     });

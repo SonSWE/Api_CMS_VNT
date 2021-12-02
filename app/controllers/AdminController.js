@@ -5,44 +5,26 @@ const Op = Sequelize.Op;
 const db = require('../models/index');
 const lib =  new require('../lib/lib');
 
-exports.Create =  async (req, res) => {
+exports.CreateNewAdmin =  async (req, res) => {
     try{
         // create a new admin
-        var admin = {
-            username: req.body.username,
-            password: await lib.passwordHash(req.body.password),
-            permissions: req.body.permissions,
-            create: parseInt(req.body.create),
-            modify: parseInt(req.body.update),
-            delete: parseInt(req.body.delete)
+        var admin = { username: req.body.username, password: await lib.passwordHash(req.body.password)};
+        // create permissions for new admin
+        var adminPer = {
+            id: parseInt(lib.randomNumber(5)),
+            usernameAdmin: admin.username,
+            idPermissions: req.body.idPermissions
         }
-        console.log(admin)
         // save admin to database
         db.Admin.create(admin)
         .then(data => {
-            res.send({message: "Successful"});
+            db.AdminPermissions.create(adminPer)
+            .then(data =>{
+                res.send({message: "Successful"});
+            }); 
         });
     }catch(err){
         res.status(500).send({message: "Error",err});
-    }
-}
-
-exports.UpdatePermissions = async (req, res) => {
-    try{
-        const username = req.body.username;
-        db.Admin.update(
-            {create: req.body.create, update: req.body.update, delete: req.body.delete}, 
-            {where:{username : username}
-        })
-        .then(num => {
-            if (num == 1) {
-                res.send({message: "Successful"});
-            } else {
-              res.send({ message: `Cannot update Tutorial with id=${username}. Maybe Tutorial was not found or req.body is empty!`});
-            }
-        });
-    }catch(err){
-        res.status(500).send({message: "Error", err});
     }
 }
 
@@ -72,9 +54,31 @@ exports.UpdatePassword = async (req, res) => {
     }
 }
 
+exports.GetListPermissions = async (req, res) => {
+    try{
+        var listPermissions = await db.Permissions.findAll()
+        .then(data => {
+            res.send({message: "Successful",ListPermissions: data});
+        });
+    }catch(err){
+        res.status(500).send({message: "Error", err});
+    }
+}
+
+exports.GetPermissionsDetail = async (req, res) => {
+    try{
+        var listPermissionsDetail = db.PermissionsDetail.findAll({where: {idPermissions: req.body.idPermissions}}) 
+        .then(data=>{
+            res.send({message: "Successful", Detail: data});
+        });
+    }catch(err){
+        res.status(500).send({message: "Error", err});
+    }
+}
+
 exports.GetListAdmin = async (req, res) => {
     try{
-        var listCofig = await db.Admin.findAll({attributes: ['username', 'permissions', 'create', 'update', 'delete']})
+        var listAdmin = await db.Admin.findAll({attributes: ['username']})
         .then(data => {
             res.send({message: "Successful", data});
         });
@@ -86,7 +90,7 @@ exports.GetListAdmin = async (req, res) => {
 exports.Find = async (req, res) => {
     try{
         const username = req.body.username;
-        var listCofig = await db.Admin.findAll({where: {username: {[Op.regexp]: `(${username})`}}})
+        var listAdmin = await db.Admin.findAll({attributes: ['username']}, {where: {username: {[Op.regexp]: `(${username})`}}})
         .then(data => {
             res.send({message: "Successful", data});
         });
@@ -107,6 +111,7 @@ exports.Delete = async (req, res) => {
             }
         });
         if(admin){
+            db.AdminPermissions.destroy({where:{usernameAdmin : username}});
             db.Admin.destroy({where:{username : username}})
             .then(num => {
                 if (num == 1) {
