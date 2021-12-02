@@ -1,6 +1,7 @@
 'use strict';
 
 const { Sequelize, DataTypes } = require("sequelize");
+const { object } = require("webidl-conversions");
 const Op = Sequelize.Op;
 const db = require('../models/index');
 const lib =  new require('../lib/lib');
@@ -56,14 +57,29 @@ exports.UpdatePassword = async (req, res) => {
 
 exports.FindAll = async (req, res) => {
     try{
-        var listAdmin = await db.Admin.findAll({attributes: ['username']})
-        .then(data => {
-            res.send({data});
-        });
+        var result = [];
+        var listAdmin = await db.Admin.findAll({attributes: ['username','idPermissions']})
+
+        if(listAdmin){
+            for(let i = 0;i< listAdmin.length; i++)
+            {
+                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}})
+                var admin = {username: listAdmin[i].username, permissions: adminPer.name}
+                result.push(admin);
+            }
+        }
+        res.send({result});
     }catch(err){
         res.status(500).send({err});
     }
 }
+
+// function makeListObject(list)
+// {
+    
+    
+//     return result;
+// }
 
 exports.FindByUsername = async (req, res) => {
     try{

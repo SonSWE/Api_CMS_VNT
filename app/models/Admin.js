@@ -9,7 +9,12 @@ module.exports = (sequelize, DataTypes) => {
           password: {
             type: DataTypes.STRING,
             allowNull: false
-          }
+          },
+          idPermissions:{
+            type:DataTypes.STRING,
+            allowNull: false,
+            field: 'id_permissions'
+        }
 },
     {
         tableName:"admin",

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
             allowNull: false
         },
-        app_id: {
+        appId: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -30,9 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
             field: 'update_time'
         },
-        config_version: {
+        configVersion: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            field: 'config_version'
         },
     },
     {

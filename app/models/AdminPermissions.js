@@ -10,11 +10,6 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
             allowNull: false,
             field: 'username_admin'
-        },
-        idPermissions:{
-            type:DataTypes.STRING,
-            allowNull: false,
-            field: 'id_permissions'
         }
     },
     {

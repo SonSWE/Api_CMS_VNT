@@ -11,11 +11,11 @@ exports.Create =  async (req, res) => {
         var config = {
             id: parseInt(lib.randomNumber(5)),
             key: req.body.key,
-            app_id: req.body.appId,
+            appId: req.body.appId,
             value: req.body.value,
             description: req.body.description,
             type: parseInt(req.body.type),
-            config_version: req.body.configVersion
+            configVersion: req.body.configVersion
         }
         // save config to database
         db.Config.create(config)
