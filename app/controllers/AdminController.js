@@ -74,20 +74,20 @@ exports.FindAll = async (req, res) => {
     }
 }
 
-// function makeListObject(list)
-// {
-    
-    
-//     return result;
-// }
-
 exports.FindByUsername = async (req, res) => {
     try{
+        var result = [];
         const username = req.body.username;
         var listAdmin = await db.Admin.findAll({where:{username: {[Op.regexp]: `(${username})`}}},{attributes: ['username']})
-        .then(data => {
-            res.send({data});
-        });
+        if(listAdmin){
+            for(let i = 0;i< listAdmin.length; i++)
+            {
+                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}})
+                var admin = {username: listAdmin[i].username, permissions: adminPer.name}
+                result.push(admin);
+            }
+        }
+        res.send({result});
     }catch(err){
         res.status(500).send({message: "Error", err});
     }
