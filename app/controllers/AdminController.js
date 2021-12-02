@@ -5,7 +5,7 @@ const Op = Sequelize.Op;
 const db = require('../models/index');
 const lib =  new require('../lib/lib');
 
-exports.CreateNewAdmin =  async (req, res) => {
+exports.Create =  async (req, res) => {
     try{
         // create a new admin
         var admin = { username: req.body.username, password: await lib.passwordHash(req.body.password)};
@@ -54,29 +54,7 @@ exports.UpdatePassword = async (req, res) => {
     }
 }
 
-exports.GetListPermissions = async (req, res) => {
-    try{
-        var listPermissions = await db.Permissions.findAll()
-        .then(data => {
-            res.send({message: "Successful",ListPermissions: data});
-        });
-    }catch(err){
-        res.status(500).send({message: "Error", err});
-    }
-}
-
-exports.GetPermissionsDetail = async (req, res) => {
-    try{
-        var listPermissionsDetail = db.PermissionsDetail.findAll({where: {idPermissions: req.body.idPermissions}}) 
-        .then(data=>{
-            res.send({message: "Successful", Detail: data});
-        });
-    }catch(err){
-        res.status(500).send({message: "Error", err});
-    }
-}
-
-exports.GetListAdmin = async (req, res) => {
+exports.FindAll = async (req, res) => {
     try{
         var listAdmin = await db.Admin.findAll({attributes: ['username']})
         .then(data => {
@@ -87,10 +65,10 @@ exports.GetListAdmin = async (req, res) => {
     }
 }
 
-exports.Find = async (req, res) => {
+exports.FindByUsername = async (req, res) => {
     try{
         const username = req.body.username;
-        var listAdmin = await db.Admin.findAll({attributes: ['username']}, {where: {username: {[Op.regexp]: `(${username})`}}})
+        var listAdmin = await db.Admin.findAll({where:{username: {[Op.regexp]: `(${username})`}}},{attributes: ['username']})
         .then(data => {
             res.send({message: "Successful", data});
         });
