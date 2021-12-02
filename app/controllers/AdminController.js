@@ -58,10 +58,10 @@ exports.FindAll = async (req, res) => {
     try{
         var listAdmin = await db.Admin.findAll({attributes: ['username']})
         .then(data => {
-            res.send({message: "Successful", data});
+            res.send({data});
         });
     }catch(err){
-        res.status(500).send({message: "Error", err});
+        res.status(500).send({err});
     }
 }
 
@@ -70,7 +70,7 @@ exports.FindByUsername = async (req, res) => {
         const username = req.body.username;
         var listAdmin = await db.Admin.findAll({where:{username: {[Op.regexp]: `(${username})`}}},{attributes: ['username']})
         .then(data => {
-            res.send({message: "Successful", data});
+            res.send({data});
         });
     }catch(err){
         res.status(500).send({message: "Error", err});
