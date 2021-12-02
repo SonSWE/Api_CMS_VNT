@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER(11),
             primaryKey: true
         },
-        idPermisions:{
+        idPermissions:{
             type:DataTypes.STRING,
             allowNull: false,
             field: 'id_permissions'
