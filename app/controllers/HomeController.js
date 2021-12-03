@@ -55,10 +55,22 @@ exports.GetListConfig = async (req, res) => {
     }
 }
 
-exports.Find = async (req, res) => {
+exports.FindByKey = async (req, res) => {
     try{
         const key = req.body.key;
         var listCofig = await db.Config.findAll({where: {key: {[Op.regexp]: `(${key})`}}})
+        .then(data => {
+            res.send({data});
+        });
+    }catch(err){
+        res.status(500).send({message: "Error", err});
+    }
+}
+
+exports.FindOne = async (req, res) => {
+    try{
+        const id = req.body.id;
+        var listCofig = await db.Config.findByPk(id)
         .then(data => {
             res.send({data});
         });
