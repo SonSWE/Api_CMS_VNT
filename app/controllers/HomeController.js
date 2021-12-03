@@ -29,16 +29,8 @@ exports.Create =  async (req, res) => {
 
 exports.Update = async (req, res) => {
     try{
-        const config = { 
-            id: req.body.id,
-            key: req.body.key,
-            appId: req.body.appId,
-            value: req.body.value,
-            description: req.body.description,
-            type: parseInt(req.body.type),
-            configVersion: req.body,
-        }
-        await db.Config.update(config, {where:{id : config.id}})
+        const id =  req.body.id
+        await db.Config.update(req.body, {where:{id : id}})
         .then(num => {
             if (num == 1) {
                 res.send({message: "Successful"});
