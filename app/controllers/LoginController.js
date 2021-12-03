@@ -11,7 +11,8 @@ exports.LoginPost = async (req, res) => {
         var user = await db.Admin.findOne({where: {username: username, password: passwordHash }});
         if(user){
             var per = await db.Permissions.findOne({where: {id: user.idPermissions}});
-            var perDetail = await db.PermissionsDetail.findAll({where: {idPermissions: per.id}}, {attributes: ['actionName', 'actionCode', 'checkAction']});
+            var perDetail = await db.PermissionsDetail.findAll( {attributes: ['actionName', 'actionCode', 'checkAction']},{where: {idPermissions: per.id}});//, 
+            console.log(perDetail);
             const inforLogin = {
                 username: username,
                 name: user.name,
