@@ -1,5 +1,6 @@
 'use strict';
 
+const { object } = require('webidl-conversions');
 const db = require('../models/index');
 const lib = new require('../lib/lib');
 
@@ -11,14 +12,16 @@ exports.LoginPost = async (req, res) => {
         var user = await db.Admin.findOne({where: {username: username, password: passwordHash }});
         if(user){
             var per = await db.Permissions.findOne({where: {id: user.idPermissions}});
-            var perDetail = await db.PermissionsDetail.findAll( {attributes: ['actionName', 'actionCode', 'checkAction']},{where: {idPermissions: per.id}});//, 
-            console.log(perDetail);
-            const inforLogin = {
+            var perDetail = await db.PermissionsDetail.findAll( {where: {idPermissions: per.id}}, {attributes: ['actionName', 'checkAction']});//, 
+            var inforLogin = {
                 username: username,
                 name: user.name,
-                PermissionsName: per.name,
-                Detail: perDetail
+                PermissionsName: per.name
             };
+            for(let i = 0; i<perDetail.length; i++)
+            {
+                inforLogin[perDetail[i].actionName] = perDetail[i].checkAction;
+            }
             var token = lib.generateAuthToken(inforLogin, process.env.JWT_KEY);
             return res.send({islogin: true, token: token});
         }else{
