@@ -63,7 +63,7 @@ exports.FindAll = async (req, res) => {
                 result.push(admin);
             }
         }
-        res.send({result});
+        res.send({data: result});
     }catch(err){
         res.status(500).send({err});
     }
@@ -82,7 +82,7 @@ exports.FindByUsername = async (req, res) => {
                 result.push(admin);
             }
         }
-        res.send({result});
+        res.send({data: result});
     }catch(err){
         res.status(500).send({message: "Error", err});
     }
@@ -101,7 +101,7 @@ exports.FindByName = async (req, res) => {
                 result.push(admin);
             }
         }
-        res.send({result});
+        res.send({data: result});
     }catch(err){
         res.status(500).send({message: "Error", err});
     }
