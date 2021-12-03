@@ -9,20 +9,16 @@ const lib =  new require('../lib/lib');
 exports.Create =  async (req, res) => {
     try{
         // create a new admin
-        var admin = { username: req.body.username, password: await lib.passwordHash(req.body.password)};
-        // create permissions for new admin
-        var adminPer = {
-            id: parseInt(lib.randomNumber(5)),
-            usernameAdmin: admin.username,
-            idPermissions: req.body.idPermissions
-        }
+        var admin = { 
+            username: req.body.username, 
+            password: await lib.passwordHash(req.body.password),
+            idPermissions: req.body.idPermissions,
+            name: req.body.name
+        };
         // save admin to database
         db.Admin.create(admin)
         .then(data => {
-            db.AdminPermissions.create(adminPer)
-            .then(data =>{
-                res.send({message: "Successful"});
-            }); 
+            res.send({message: "Successful"});
         });
     }catch(err){
         res.status(500).send({message: "Error",err});
@@ -58,13 +54,12 @@ exports.UpdatePassword = async (req, res) => {
 exports.FindAll = async (req, res) => {
     try{
         var result = [];
-        var listAdmin = await db.Admin.findAll({attributes: ['username','idPermissions']})
-
+        var listAdmin = await db.Admin.findAll({attributes: ['username','idPermissions','name']});
         if(listAdmin){
             for(let i = 0;i< listAdmin.length; i++)
             {
-                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}})
-                var admin = {username: listAdmin[i].username, permissions: adminPer.name}
+                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}});
+                var admin = {username: listAdmin[i].username,name: listAdmin[i].name, permissions: adminPer.name};
                 result.push(admin);
             }
         }
@@ -78,12 +73,31 @@ exports.FindByUsername = async (req, res) => {
     try{
         var result = [];
         const username = req.body.username;
-        var listAdmin = await db.Admin.findAll({where:{username: {[Op.regexp]: `(${username})`}}},{attributes: ['username']})
+        var listAdmin = await db.Admin.findAll({where:{username: {[Op.regexp]: `(${username})`}}},{attributes: ['username','idPermissions','name']});
         if(listAdmin){
             for(let i = 0;i< listAdmin.length; i++)
             {
-                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}})
-                var admin = {username: listAdmin[i].username, permissions: adminPer.name}
+                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}});
+                var admin = {username: listAdmin[i].username,name: listAdmin[i].name, permissions: adminPer.name};
+                result.push(admin);
+            }
+        }
+        res.send({result});
+    }catch(err){
+        res.status(500).send({message: "Error", err});
+    }
+}
+
+exports.FindByName = async (req, res) => {
+    try{
+        var result = [];
+        const name = req.body.name;
+        var listAdmin = await db.Admin.findAll({where:{name: {[Op.regexp]: `(${name})`}}},{attributes: ['username','idPermissions','name']});
+        if(listAdmin){
+            for(let i = 0;i< listAdmin.length; i++)
+            {
+                var adminPer = await db.Permissions.findOne({where:{id : listAdmin[i].idPermissions}});
+                var admin = {username: listAdmin[i].username,name: listAdmin[i].name, permissions: adminPer.name};
                 result.push(admin);
             }
         }

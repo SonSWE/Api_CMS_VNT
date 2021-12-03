@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
             allowNull: false,
             field: 'id_permissions'
-        }
+          },
+          name:{
+            type: DataTypes.STRING,
+            allowNull: false
+          }
 },
     {
         tableName:"admin",
