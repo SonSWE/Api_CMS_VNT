@@ -5,7 +5,7 @@ const homeController = require("../controllers/HomeController");
 
 router.get("/get-list-config", homeController.GetListConfig);
 router.get("/find", homeController.FindByKey);
-router.get("/find-one-by-id", homeController.FindOne);
+router.post("/find-one-by-id", homeController.FindOne);
 router.post("/create", homeController.Create);
 router.put("/update", homeController.Update);
 router.delete("/delete", homeController.Delete);
