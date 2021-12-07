@@ -125,9 +125,12 @@ exports.Delete = async (req, res) => {
                 if (num == 1) {
                     res.send({message: "Successful"});
                 } else {
-                res.send({ message: `Cannot update Tutorial with id=${username}. Maybe Tutorial was not found or req.body is empty!`});
+                    res.send({ message: `Cannot update Tutorial with id=${username}. Maybe Tutorial was not found or req.body is empty!`});
                 }
             });
+        }
+        else{
+            res.send({message: "cannot find username or password"});
         }
     }catch(err){
         res.status(500).send({message: "Error", err});
