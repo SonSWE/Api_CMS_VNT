@@ -119,7 +119,6 @@ exports.Delete = async (req, res) => {
             }
         });
         if(admin){
-            db.AdminPermissions.destroy({where:{usernameAdmin : username}});
             db.Admin.destroy({where:{username : username}})
             .then(num => {
                 if (num == 1) {
